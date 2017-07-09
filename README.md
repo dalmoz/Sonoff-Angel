@@ -1,57 +1,36 @@
-## Sonoff-Tasmota
-Provide ESP8266 based Sonoff by [iTead Studio](https://www.itead.cc/) and ElectroDragon IoT Relay with Serial, Web and MQTT control allowing 'Over the Air' or OTA firmware updates using Arduino IDE.
+## Sonoff-Angel
+Sonoff-Angel firmware is a fork off Sonoff-Tasmota which hardens usage of dangerous MQTT routines in order to have a more secure, out-of-the-box, firmware experience.
+
+That said - there is no particular hardeining except MQTT protocol starilizations, which omits dangerous method usages from the code base.
+
+In particular - "Angel edition" eliminates the usage of those commands:
+1. cmnd/sonoff/AP
+1. cmnd/sonoff/Status 2
+1. cmnd/sonoff/SSId
+1. cmnd/sonoff/Password
+1. cmnd/sonoff/WebServer
+1. cmnd/sonoff/WebConfig
+1. cmnd/sonoff/MqttClient
+1. cmnd/sonoff/MqttHost
+1. cmnd/sonoff/MqttUser
+1. cmnd/sonoff/MqttPassword
+1. cmnd/sonoff/otaUrl
+1. cmnd/sonoff/Upgrade
+1. cmnd/sonoff/Upload
+
+
 
 Current version is **5.2.4** - See [sonoff/_releasenotes.ino](https://github.com/arendst/Sonoff-Tasmota/blob/master/sonoff/_releasenotes.ino) for change information.
 
-### **** ATTENTION Version 5.x.x specific information ****
+## What about the Robin hood scenario?
+As the original version of sonoff is wildly used and found to be able to be exploited over MQTT while the broker is connected promiscuously to the internet - this version can be implemented by sucessfuly exploiting the otaUrl parameter overwrite and then Upgrade/Upload triggering in order to control the box - one can be a Robin Hood of sorts and hack those devices in order to bring "Aangel" into working, a wise hacker would be able to do so without harming configuration and keeping all other functionalities intact.
 
-This version uses a new linker script to free flash memory for future code additions. It moves the settings from Spiffs to Eeprom. If you compile your own firmware download the new linker to your IDE or Platformio base folder. See [Wiki > Prerequisite](https://github.com/arendst/Sonoff-Tasmota/wiki/Prerequisite).
+As I perceive that this scenario is possible - I do not encourage that by any means as this, albeit being righteous, is illegal over the globe.
 
-Best practice to implement is:
-- Open the webpage to your device
-- Perform option ``Backup Configuration``
-- Upgrade new firmware using ``Firmware upgrade``
-- If configuration conversion fails keep the webpage open and perform ``Restore Configuration``
+## Is Angel is the only option to defend Sonoff's vulnerable MQTT topics?
 
-You should now have a device with 32k more code memory to play with.
+NO.
 
-### *********************************************************
+It is neither the only nor the best option to harden your systems but in many cases can be the easiest method because of the complexity of implementing a broker-centric permission scheme over known topics which can be changed and are, in times, hard to interpret correctly.
 
-- This version provides all (Sonoff) modules in one file and starts up with Sonoff Basic.
-- Once uploaded select module using the configuration webpage or the commands ```Modules``` and ```Module```.
-- After reboot select config menu again or use commands ```GPIOs``` and ```GPIO``` to change GPIO with desired sensor.
-
-<img src="https://github.com/arendst/arendst.github.io/blob/master/media/sonoffbasic.jpg" width="250" align="right" />
-
-See [Wiki](https://github.com/arendst/Sonoff-Tasmota/wiki) for more information.<br />
-See [Community](https://groups.google.com/d/forum/sonoffusers) for forum and more user experience.
-
-The following devices are supported:
-- [iTead Sonoff Basic](http://sonoff.itead.cc/en/products/sonoff/sonoff-basic)
-- [iTead Sonoff RF](http://sonoff.itead.cc/en/products/sonoff/sonoff-rf)
-- [iTead Sonoff SV](https://www.itead.cc/sonoff-sv.html)<img src="https://github.com/arendst/arendst.github.io/blob/master/media/sonoff_th.jpg" width="250" align="right" />
-- [iTead Sonoff TH10/TH16 with temperature sensor](http://sonoff.itead.cc/en/products/sonoff/sonoff-th)
-- [iTead Sonoff Dual](http://sonoff.itead.cc/en/products/sonoff/sonoff-dual)
-- [iTead Sonoff Pow](http://sonoff.itead.cc/en/products/sonoff/sonoff-pow)
-- [iTead Sonoff 4CH](http://sonoff.itead.cc/en/products/sonoff/sonoff-4ch)
-- [iTead S20 Smart Socket](http://sonoff.itead.cc/en/products/residential/s20-socket)
-- [iTead Slampher](http://sonoff.itead.cc/en/products/residential/slampher-rf)
-- [iTead Sonoff Touch](http://sonoff.itead.cc/en/products/residential/sonoff-touch)
-- [iTead Sonoff SC](http://sonoff.itead.cc/en/products/residential/sonoff-sc)
-- [iTead Sonoff Led](http://sonoff.itead.cc/en/products/appliances/sonoff-led)
-- [iTead Sonoff BN-SZ01 Ceiling Led](http://sonoff.itead.cc/en/products/appliances/bn-sz01)
-- [iTead Sonoff Dev](https://www.itead.cc/sonoff-dev.html)
-- [iTead 1 Channel Switch 5V / 12V](https://www.itead.cc/smart-home/inching-self-locking-wifi-wireless-switch.html)
-- [iTead Motor Clockwise/Anticlockwise](https://www.itead.cc/smart-home/motor-reversing-wifi-wireless-switch.html)
-- [Electrodragon IoT Relay Board](http://www.electrodragon.com/product/wifi-iot-relay-board-based-esp8266/)
-
-Planned support:
-- [iTead Sonoff 4CH Pro](http://sonoff.itead.cc/en/products/sonoff/sonoff-4ch-pro)
-- [iTead Sonoff T1](https://www.itead.cc/smart-home/sonoff-t1.html)
-- [iTead Sonoff B1](https://www.itead.cc/smart-home/sonoff-b1.html)
-
-Optional future support:
-- iTead RF Bridge
-
-<img src="https://github.com/arendst/arendst.github.io/blob/master/media/sonofftoucheu.jpg" height="280" align="left" /> 
-<img src="https://github.com/arendst/arendst.github.io/blob/master/media/sonoff4ch.jpg" height="250" align="right" /> 
+In particular - one can enact a policy on the broker with a similar fashion to disallowing anonymous connections and authorizing user per topic per publish method, and one should be able to subscribe to stat/sonoff/RESULT without proper authentication as well.
