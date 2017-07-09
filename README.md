@@ -1,6 +1,8 @@
 ## Sonoff-Angel
 Sonoff-Angel firmware is a fork off Sonoff-Tasmota which hardens usage of dangerous MQTT routines in order to have a more secure, out-of-the-box, firmware experience.
 
+![Sonoff-Angel Logo](https://pbs.twimg.com/media/DEVC6IZXsAEZfDR.jpg:large)
+
 That said - there is no particular hardeining except MQTT protocol starilizations, which omits dangerous method usages from the code base.
 
 In particular - "Angel edition" eliminates the usage of those commands:
